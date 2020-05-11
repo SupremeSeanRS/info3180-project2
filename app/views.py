@@ -22,6 +22,33 @@ from functools import wraps
 
 
 
+def token_authenticate(t):
+    @wraps(t)
+    def decorated(*args, **kwargs):
+        
+        auth = request.headers.get('Authorization', None)
+        
+        if not auth:
+            return jsonify({'error': 'Access Denied : No Token Found'}), 401
+        else:
+            try:
+                userdata = jwt.decode(auth.split(" ")[1], app.config['SECRET_KEY'])
+                currentUser = Users.query.filter_by(username = userdata['user']).first()
+                
+                if currentUser is None:
+                    return jsonify({'error': 'Access Denied'}), 401
+                
+            except jwt.exceptions.InvalidSignatureError as e:
+                print(e)
+                return jsonify({'error':'Invalid Token'})
+            except jwt.exceptions.DecodeError as e:
+                print(e)
+                return jsonify({'error': 'Invalid Token'})
+            return t(*args, **kwargs)
+    return decorated
+
+
+
 @app.route('/')
 def home():
     """Render website's home page."""
