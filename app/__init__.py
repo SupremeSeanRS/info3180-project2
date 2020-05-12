@@ -11,7 +11,7 @@ bcrypt = Bcrypt(app)
 db = SQLAlchemy(app)
 
 app.config['SECRET_KEY'] = "123ABC" 
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://project2:project2@localhost/database"
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://project2:project2@localhost/project2"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True  # added just to suppress a warning
 
 
