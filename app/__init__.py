@@ -10,8 +10,8 @@ csrf = CSRFProtect(app)
 bcrypt = Bcrypt(app)
 db = SQLAlchemy(app)
 
-app.config['SECRET_KEY'] = "secure key" 
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://ospppqppphtysf:13aebfba2b841c15dcf9d60f50262e629d09f5c8d503fb4faf1142ce289b13d8@ec2-54-235-193-34.compute-1.amazonaws.com:5432/d99r9bmdq71p21"
+app.config['SECRET_KEY'] = "123ABC" 
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://project2:project2@localhost/project2"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True  # added just to suppress a warning
 
 
