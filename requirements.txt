@@ -13,7 +13,6 @@ cffi==1.11.5
 click==7.1.1
 Mako==1.0.7
 six==1.11.0
-wsgiref==0.1.2
 Flask-JWT
 MarkupSafe==1.1.1
 PyJWT==1.6.1

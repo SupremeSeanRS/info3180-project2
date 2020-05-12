@@ -9,8 +9,8 @@ from app import app, db
 from flask import render_template, request, redirect, url_for, jsonify
 from werkzeug.security import check_password_hash
 from werkzeug.utils import secure_filename
-from forms import *
-from models import *
+from app.forms import loginForm, registrationForm, postForm
+from app.models import Posts, Users, Likes, Follows
 import os, datetime
 import jwt
 from functools import wraps
