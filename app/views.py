@@ -106,11 +106,14 @@ def register():
     
 @app.route('/api/auth/login',methods=['POST'])
 def login():
-    
+    # Here we use a class of some kind to represent and validate our
+    # client-side form data. For example, WTForms is a library that will
+    # handle this for us, and we use a custom LoginForm to validate.
     form = loginForm()
-    
+    # Login and validate the user.
     if request.method == 'POST' and form.validate_on_submit():
-
+        # Query our database to see if the username and password entered
+        # match a user that is in the database.
         username = form.username.data
         password = form.password.data
         
@@ -130,7 +133,7 @@ def login():
             payload = {'user_id': user.id}
             token = jwt.encode(payload,token_key)
             session['userid']=user.id
-            return jsonify(response=[{"token":token,"message":"login was successfully","user":user.id}])
+            return jsonify(response=[{"token":token.decode("utf-8"),"message":"login was successfully","user":user.id}])
             
         else:
             flash('Username or Password is incorrect.', 'danger')
@@ -187,10 +190,10 @@ def post(user_id):
             f.append(follower.user_id)
         for user in Users:
             u.append({'id':user.id,'user_id':user.user_id,'photo':user.photo,'caption':user.caption,
-            'created_on':user.created_on,'likes':0})
+            'created_on':user.created,'likes':0})
         return jsonify(response=[{"id":user_id ,"username":userdetail.username,"firstname":userdetail.first_name,
         "lastname":userdetail.last_name,"email":userdetail.email,"location": userdetail.location,"biography":userdetail.biography,
-        "profile_photo":userdetail.profile_photo,"joined_on":userdetail.joined_on,"posts":u,"numpost":length,"numfollower":follow,"follower":f}])
+        "profile_photo":userdetail.profile_photo,"joined_on":userdetail.joined,"posts":u,"numpost":length,"numfollower":follow,"follower":f}])
     else:
          return jsonify(error=[{"errors":"unable to create link"}])
         
@@ -237,7 +240,7 @@ def get_AllPost():
             userdetail =UserProfile.query.filter_by(id=user.user_id).first()
             userlike = len(UserLikes.query.filter_by(post_id=user.id).all())
             u.append({'id':user.id,'user_id':user.user_id,'postphoto':user.photo,'caption':user.caption,
-            'created_on':user.created_on,'likes':userlike,"username":userdetail.username,"userpro":userdetail.profile_photo})
+            'created_on':user.created,'likes':userlike,"username":userdetail.username,"userpro":userdetail.profile_photo})
         return jsonify (response=[{'post': u}])
     return jsonify (errors=[{'error': 'unable to create link'}])
 

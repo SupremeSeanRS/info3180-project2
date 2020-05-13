@@ -71,7 +71,6 @@ const Home = Vue.component('home', {
               <div v-if="uc!=''" id="home">
                <h1> Welcome to Photogram </h1>
                 <p> Where moments can be share instance.<br>So Please enjoy</p><br>
-                <p> Any issues you have may feel free to contact us Group 18 inc.</p>
               </div>
                  
              <div v-else class="Frame">
@@ -87,7 +86,7 @@ const Home = Vue.component('home', {
                 </div>
                 <div>
                  <router-link to="/register" class="btn btn-primary greenbut">Register</router-link>&nbsp
-                 <router-link to="/login" class="btn btn-primary butsize">login</router-link>
+                 <router-link to="/login" class="btn btn-primary butsize">Login</router-link>
                 </div>
                </div>
                </div>
@@ -256,7 +255,6 @@ const Register=Vue.component('register',{
                   
               })
               .catch(function(errors){
-                  //console.log(errors);
               });
         },
     Reset:function ()
@@ -339,7 +337,6 @@ const Login=Vue.component('login',{
                   }
               })
               .catch(function(errors){
-                  //console.log(errors);
               });
         },
     Reset:function (){
@@ -384,7 +381,6 @@ const Logout= Vue.component('logout-form',{
                  }
             })
             .catch(function (error) {
-            //console.log(error);
         });
     }
 });
@@ -405,11 +401,11 @@ const Explore=Vue.component('explore',{
                              <div class="space3">
                              <span @click="post(user.user_id)"><h6 class="fixme" ><img v-bind:src="user.userpro" alt="User Profile picture" style="width:20px;height:20px;"/> {{user.username}}</h6></span>
                              <img v-bind:src="user.postphoto" alt="Post image" style="width:800px;height:400px;"/>
-                             <br>
+                             <br><br>
                                <span class="fixme"> {{user.caption}}</span>
                              </div>
                              <div>
-                               <span @click="Like(user.id)"> <img src="/static/uploads/like.jpg" alt="like icon" style="width:20px;height:20px;"/> <span v-bind:id="user.id">{{user.likes}}</span> Likes </span><span class="space2"> {{user.created_on}}</span>
+                               <span @click="Like(user.id)"> <img src="/static/images/like.png" alt="like icon" style="width:20px;height:20px;"/> <span v-bind:id="user.id">{{user.likes}}</span> Likes </span><span class="space2"> {{user.created_on}}</span>
                             </div>
                             </div>
                         </li>
@@ -436,10 +432,10 @@ const Explore=Vue.component('explore',{
               .then(function(jsonResponse){
                   //display a success message
                   self.users = jsonResponse.response['0'].post; 
-                  //console.log(jsonResponse);
+
               })
               .catch(function(error){
-                  //console.log(error);
+
               });
     },
     data: function(){
@@ -500,7 +496,7 @@ const Users=Vue.component('users',{
             <div v-else class="Frame2"> 
               <div class="en1">
                   <div class="s">
-                     <img v-bind:src="user.profile_photo" alt="profile picture" style="width:200px;height:200px;padding-bottom:10px;padding-right:10px;">
+                     <img v-bind:src="user.profile_photo" alt="profile picture" style="width:200px;height:200px;padding-bottom:10px;padding-right:20px;">
                    </div>
                   <div class="se">
                     <div class="space">
@@ -524,16 +520,16 @@ const Users=Vue.component('users',{
                      <div class="space1">
                       <br> 
                       <span v-if="uc==user.id"><button class="btn btn-primary but butsize1 hid">Follow</button></span>
-                      <span v-else-if=" uc in user.follower"><button class="btn btn-primary but butsize1">Following</button></span>
+                      <span v-else-if=" uc in user.follower"><button class="btn btn-primary but butsize1" id="changeColor">Following</button></span>
                       <span v-else><button class="btn btn-primary but butsize1" @click="Follow" id="fo">Follow</button></span>
                      </div>
                     </div>
                </div>
                <div class="userpic">
                 <ul class="profilepost__list">
-                    <li v-for="post in user.posts"class="post_item" >
-                     <div class="">
-                     <img v-bind:src="post.photo" alt="Post image" style="width:340px;height:200px;"/>
+                    <li v-for="post in user.posts"class="post_item2" >
+                     <div class="post_imgs">
+                     <img v-bind:src="post.photo" alt="Post image" style="width: 320px; height: 200px; padding-left: 2px; padding-right: 2px;"/>
                      </div>
                     </li>
                 </ul>
@@ -621,13 +617,11 @@ const Users=Vue.component('users',{
             return response.json();
             })
             .then(function (jsonResponse) {
-            // display a success message
-            //console.log(jsonResponse);
             let loginForm= document.getElementById('follow').innerHTML=jsonResponse.response['0'].follow;
-            let log= document.getElementById('fo').innerText="following";
+            let log= document.getElementById('fo').innerText="Following";
+            document.getElementById('changeColor').style.backgroundColor="limegreen";
             })
             .catch(function (error) {
-             //console.log(error);
             });
         }
     }
@@ -701,7 +695,6 @@ const Post=Vue.component('post',{
                   }
               })
               .catch(function(error){
-                  //console.log(error);
               });
         }
     }
