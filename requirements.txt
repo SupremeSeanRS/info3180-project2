@@ -1,5 +1,4 @@
 Flask
-Flask-Bcrypt
 Flask-Login
 Flask-Migrate
 Flask-SQLAlchemy
@@ -7,12 +6,7 @@ Flask-Script
 Flask-WTF
 Jinja2
 alembic
-argparse
-bcrypt
-cffi
 click
-Mako
-six
 Flask-JWT
 MarkupSafe
 PyJWT
@@ -22,7 +16,3 @@ Werkzeug
 gunicorn
 itsdangerous
 psycopg2
-python-dateutil
-python-editor
-pycparser
-

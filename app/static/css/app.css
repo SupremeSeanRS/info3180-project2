@@ -4,117 +4,183 @@ body {
     margin: 0px;
 }
 
-#main {
-  padding-top: 60px;
-}
-
 footer {
-  position:absolute;
-  width: 100%;
-  height: 50px;
-  background-color: #f5f5f5;
+    position: relative;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    margin-top: auto;
 }
 
-input,textarea,select{
-    width:100%;
-}
-.form {
-  width: 100%;
-  max-width: 400px;
-  padding: 15px;
-  margin: 0 auto;
-  background-color: white;
+#home {
+    text-align: center;
 }
 
-.homePic{
+.home_page, .login_page, .post_page {
+    height: 600px;
+    width: 1000px;
+}
+
+#homepic {
     position: absolute;
-    top:20%;
-    left:20%;
+    top: 20%;
+    left: 20%;
     width: 400px;
     height: 400px;
-     
- }
- 
- .Welcome{
-   position: absolute;
-   top:20%;
-   left:50%;
-   width: 400px;
-   height: 400px;
-   background-color:white;
-   text-align:center;
-   
- }
- .Frame{
-   width: 1000px;
-   height: 600px;
-   }
-   
- .en{
-     border-style:solid outset outset outset;
-     border-radius: 5px;
-     width: 600px;
-     border-top-color:#007bff;
-     background-color: white;
-     position: relative;
-     left:25%;
- }
- 
- .greenbut{
-     background-color: #1fe24b;
-     border-color:#1fe24b;
-     width: 180px;
-    }
-    
- .butsize{
-     width: 180px;
-  }
-  
-  .butsize1{
-      width:100%;
-  }
- 
- .l{
-     width: 400px;
-     padding-left: 50px;
- }
- .l1{
-     width: 400px;
-     padding-left: 80px;
-     word-wrap: break-word;
- }
- 
- .pad{
-     padding-top: 10px;
-     padding-bottom: 80px;
- }
- 
- .padtext{
-     position:relative;
-     left: 10px;
-     padding-top: 20px;
-     padding-bottom: 10px;
-     width: 380px;
-     border-bottom:1px solid gray;
- }
- 
- .b{
-     padding-left: 30%;
-     padding-top: 100px;
- }
- 
-.c{
-     width:100px;
-   }
-   
- .postbut{
-     position:absolute;
-     top:15%;
-     left: 80%;
-     width: 200px;
-  }
-  
- .profilepost__list{ 
+    display: inline-block;
+}
+
+#home_img {
+    width: 400px;
+    height: 400px;
+}
+
+.home_welcome {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    width: 400px;
+    height: 400px;
+    background-color:white;
+    text-align:center;
+    display: inline-block;
+}
+
+.photogramlogo_home {
+    position: relative;
+    left: 10px;
+    padding-top: 20px;
+    padding-bottom: 10px;
+    width: 380px;
+    border-bottom: 1px solid gray;
+}
+
+#photogramlogo_home_pic {
+    width: 18vw;
+    height: 6vh;
+}
+
+.welcome_text {
+    padding-top: 10px;
+    padding-bottom: 80px;
+}
+
+.registerBtn, .loginBtn {
+    width: 180px;
+}
+
+.reg, .log, .post, .fol, .foll, .sub {
+    width: 100%;
+}
+
+.registrationWelcome, .loginWelcome, .postWelcome {
+    padding-left: 32%;
+    padding-top: 100px;
+}
+
+.regForm, .logForm, .postForm{
+    background-color: white;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 400px;
+    padding: 15px;
+}
+
+#usrname, #passwrd {
+    text-align: left;
+}
+
+.hide_info {
+    visibility: hidden;
+}
+
+.postBtn {
+    position:absolute;
+    top:15%;
+    left: 80%;
+    width: 200px;
+}
+
+.userPage {
+    width: 1100px;
+    height: 1000px;
+    position: relative;
+    padding-bottom: 50px;
+}
+
+.userPic {
+    position: absolute;
+    left: 5%;
+    top: 5%;
+}
+
+#userImg {
+    width: 200px;
+    height: 200px;
+    padding-bottom: 10px;
+    padding-right: 20px;
+}
+
+.top-container {
+    border-style:solid outset outset outset;
+    border-radius: 5px;
+    width: 1008px;
+    background-color: white;
+    position: absolute;
+    height: 250px;
+    top: 5%;
+    left:5%;
+}
+
+.userName {
+    position: absolute;
+    left: 25%;
+    top: 5%;
+    height: 120px;
+    width: 40%;
+}
+
+.fname-lname, .joined-date {
+    padding-bottom: 20px;
+}
+
+.userInfo {
+    position: relative;
+    top: 5%;
+    left: 70%;
+    width: 25%;
+}
+
+.postCount {
+    position:absolute;
+    padding-left:20%;
+    padding-top:10%;
+    text-align:center;
+}
+
+.followerCount {
+    position: absolute;
+    padding-left: 60%;
+    padding-top: 10%;
+    text-align: center;
+}
+
+.userBtns {
+    padding-top: 120px;
+    padding-bottom: 80px;
+}
+
+.userPosts {
+    position: absolute;
+    top: 32%;
+    width: 1060px;
+    height: 800px;
+    overflow: auto;
+    left: 29px;
+}
+
+.userPost-List {
     display: grid;  
     grid-template-columns: 340px 340px 340px;
     grid-column-gap: 5px;  
@@ -122,9 +188,27 @@ input,textarea,select{
     list-style-type: none; 
     padding: 10px;  
     margin: 5px;
- }
- 
-.posts__list{ 
+}
+
+.post_item {
+    display: inline-block;
+    border-style: outset;
+    border-radius: 4px;
+    font-size: 14px;
+    word-wrap: break-word;
+    background-color: white;  
+    float:left;
+    margin: 10px 10px; 
+}
+
+#userPost-Img {
+    width: 320px; 
+    height: 200px; 
+    padding-left: 2px; 
+    padding-right: 2px;
+}
+
+.explore-posts {
     display: grid;  
     grid-template-columns: 824px;
     grid-column-gap: 10px;  
@@ -132,135 +216,27 @@ input,textarea,select{
     list-style-type: none; 
     padding: 10px;  
     margin: 5px;
- }
- 
-.post_item{ 
-    display:inline-block;
-     border-style: outset;
-     border-radius: 5px;
-     font-size: 14px;
-     word-wrap: break-word;
-     background-color: white;  
-     float:left;
-     margin: 30px 10px; 
 }
 
-.post_item2{ 
-    display:inline-block;
-     border-style: outset;
-     border-radius: 4px;
-     font-size: 14px;
-     word-wrap: break-word;
-     background-color: white;  
-     float:left;
-     margin: 10px 10px; 
+.user_explore {
+    padding-bottom:50px;
 }
 
-.s{
-   position:absolute;
-   left:5%;
-   top:5%;
- }
- 
- .se{
-   position:absolute;
-   left: 25%;
-   top:5%;
-   height: 120px;
-   width: 40%;
- }
- 
- .see{
-   position:relative;
-   top:5%;
-   left: 70%;
-   width: 25%;
- }
- 
- .en1{
-     border-style:solid outset outset outset;
-     border-radius: 5px;
-     width: 1008px;
-     border-top-color:#007bff;
-     background-color: white;
-     position: absolute;
-     height: 250px;
-     top: 5%;
-     left:5%;
- }
- 
- .Frame2{
-     width: 1100px;
-     height:1000px;
-     position: relative;
-     padding-bottom:50px;
- }
- 
- .space{
-     padding-bottom: 20px;
- }
- .space1{
-     padding-top: 120px;
-     padding-bottom: 80px;
- }
- 
- .space2{
-     padding-left:560px;
- }
- 
- .space3{
-     padding-bottom:50px;
- }
- 
- .postscount{
-     position:absolute;
-     padding-left:20%;
-     padding-top:10%;
-     text-align:center;
- }
- 
- .followscount{
-     position:absolute;
-     padding-left:60%;
-     padding-top:10%;
-     text-align:center;
- }
-
- .userpic{
-     position:absolute;
-     top:32%;
-     width:1060px;
-     height: 800px;
-     overflow:auto;
-     left: 29px;
- }
- 
- .error{
-     text-align: center;
-     background-color: red;
- }
- 
- .error2{
-     text-align: center;
-     background-color: red;
-     height: 20px;
- }
- 
- .success{
-     text-align: center;
-     background-color: green;
- }
- 
- .fixme{
+.user-profile-explore, .user-caption-explore {
     padding-top:10px;
     padding-left:10px;
- }
- 
- .hid{
-     visibility: hidden;
- }
- 
- #home{
-     text-align:center;   
- }
- 
+}
+
+#user-img-explore, #like-icon {
+    width: 25px;
+    height: 25px;
+}
+
+#user-post {
+    width: 800px;
+    height: 400px;
+}
+
+.creation_time {
+    padding-left: 560px;
+}

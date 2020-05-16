@@ -15,9 +15,9 @@ class UserProfile(db.Model):
     location = db.Column(db.String(80))
     biography = db.Column(db.String(255))
     profile_photo = db.Column(db.String(255))
-    joined = db.Column(db.String(80))
+    joined_on = db.Column(db.String(80))
 
-    def __init__(self, username, password, first_name, last_name, gender, location, email, bio, photo, date):
+    def __init__(self, username, password, first_name, last_name, gender, location, email, biography, photo, date):
         self.username = username
         self.password = generate_password_hash(password, method='pbkdf2:sha256')
         self.first_name = first_name
@@ -25,9 +25,9 @@ class UserProfile(db.Model):
         self.gender = gender
         self.location = location
         self.email = email
-        self.biography = bio
+        self.biography = biography
         self.profile_photo = photo
-        self.joined = date
+        self.joined_on = date
 
     def is_authenticated(self):
         return True
@@ -40,9 +40,9 @@ class UserProfile(db.Model):
 
     def get_id(self):
         try:
-            return unicode(self.id)  # python 2 support
+            return unicode(self.id)  
         except NameError:
-            return str(self.id)  # python 3 support
+            return str(self.id)  
 
     def __repr__(self):
         return '<User %r>' %  self.username
@@ -56,14 +56,14 @@ class UserPosts(db.Model):
     user_id = db.Column(db.Integer)
     photo = db.Column(db.String(255))
     caption = db.Column(db.String(80))
-    created = db.Column(db.String(80))
+    created_on = db.Column(db.String(80))
     
 
     def __init__(self,user_id, photo, caption, created):
         self.user_id = user_id
         self.photo = photo
         self.caption = caption
-        self.created = created
+        self.created_on = created
 
 class UserLikes(db.Model):
 

@@ -7,7 +7,7 @@ This file creates your application.
 
 import os, datetime, jwt, base64
 from app import app, db, login_manager, token_key
-from flask import render_template, request, redirect, url_for, jsonify, flash, g, session, _request_ctx_stack 
+from flask import render_template, request, redirect, url_for, jsonify, flash, g, session
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
@@ -64,31 +64,32 @@ def home():
     
 @app.route('/api/users/register', methods=['POST'])
 def register():
-    """accepts user information and save it to the database"""
+    
     form = registrationForm()
-    now = datetime.datetime.now()
+    ctime = datetime.datetime.now()
+
     if request.method == 'POST' and form.validate_on_submit():
-        username= form.username.data
+        username = form.username.data
         password = form.password.data
-        conpassword = form.confirmpassword.data
+        conpassword = form.conpassword.data
         fname = form.firstname.data
         lname = form.lastname.data
         gender = form.gender.data
         email = form.email.data
         location = form.location.data
-        bio=form.bio.data
-        photo=form.photo.data
+        biography = form.bio.data
+        photo = form.photo.data
         filename = secure_filename(photo.filename)
 
         photo.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         photo='/static/uploads/'+ filename
-        date=now.strftime("%B %d, %Y")
+        date = ctime.strftime("%d %B %Y")
         
-        user = UserProfile.query.filter_by(username=username).first()
+        user = UserProfile.query.filter_by(username = username).first()
         if user is None :
-            #todo add user to database
+
             if password == conpassword:
-                user=UserProfile(username, password, fname, lname, gender, location, email, bio, photo, date)
+                user = UserProfile(username, password, fname, lname, gender, location, email, biography, photo, date)
                 db.session.add(user)
                 db.session.commit()
                 flash('Registration was successful', 'success')
@@ -106,33 +107,21 @@ def register():
     
 @app.route('/api/auth/login',methods=['POST'])
 def login():
-    # Here we use a class of some kind to represent and validate our
-    # client-side form data. For example, WTForms is a library that will
-    # handle this for us, and we use a custom LoginForm to validate.
+
     form = loginForm()
-    # Login and validate the user.
+
     if request.method == 'POST' and form.validate_on_submit():
-        # Query our database to see if the username and password entered
-        # match a user that is in the database.
+
         username = form.username.data
         password = form.password.data
         
-        user = UserProfile.query.filter_by(username=username).first()
+        user = UserProfile.query.filter_by(username = username).first()
         
         if user is not None and check_password_hash(user.password, password):
-            remember_me = False
-            
-            if 'remember_me' in request.form:
-                remember_me = True
-        
-            # If the user is not blank, meaning if a user was actually found,
-            # then login the user and create the user session.
-            # user should be an instance of your `User` class
-            #login_user(user, remember=remember_me)
             
             payload = {'user_id': user.id}
             token = jwt.encode(payload,token_key)
-            session['userid']=user.id
+            session['userid'] = user.id
             return jsonify(response=[{"token":token.decode("utf-8"),"message": "Login was successful","user":user.id}])
             
         else:
@@ -150,19 +139,19 @@ def logout():
     g.currrent_user=None
     if session['userid']:
         session.pop('userid')  
-        logout={"message": "User has been successfully logged out."}
+        logout={"message":"User has been successfully logged out."}
         return jsonify(response=[logout])
-    return jsonify(errors=[{"errors": "User was not logged out."}])
+    return jsonify(errors=[{"errors":"not logout"}])
+
 
 
 @app.route('/api/users/<user_id>/posts',methods=["POST","GET"]) 
 @requires_auth
-#@login_required
 def post(user_id):
-    """used for adding posts to the users feed"""
+
     form = postForm()
     id = int(user_id)
-    now = datetime.datetime.now()
+    ctime = datetime.datetime.now()
     
     if request.method == 'POST':
         if form.validate_on_submit():
@@ -171,97 +160,98 @@ def post(user_id):
             filename = secure_filename(photo.filename)
             photo.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             photo='/static/uploads/'+ filename
-            date=now.strftime("%B %d, %Y")                                                                                                                                                                     
-            user=UserPosts(user_id,photo,caption,date)
-            db.session.add(user)
+            date = ctime.strftime("%d %B %Y")                                                                                                                                                                     
+            userpost = UserPosts(user_id, photo, caption, date)
+            db.session.add(userpost)
             db.session.commit()
-            return jsonify(response=[{"message": "Post was successfully created."}])
+            return jsonify(response=[{"message": "Successfully created a new post"}])
         else:
             return jsonify(errors=[{"errors":form_errors(form)}])
     if request.method == 'GET':
-        u=[]
+        p=[]
         f=[0,0]
-        userdetail =UserProfile.query.filter_by(id=id).first()
-        Users =UserPosts.query.filter_by(user_id=id).all()
-        length=len(Users)
-        followers = UserFollows.query.filter_by(user_id=id).all()
-        follow=len(followers)
+        userDetail = UserProfile.query.filter_by(id = id).first()
+        Users = UserPosts.query.filter_by(user_id = id).all()
+        length = len(Users)
+        followers = UserFollows.query.filter_by(user_id = id).all()
+        follow = len(followers)
         for follower in followers:
-            f.append(follower.user_id)
+            p.append(follower.user_id)
         for user in Users:
-            u.append({'id':user.id,'user_id':user.user_id,'photo':user.photo,'caption':user.caption,
-            'created_on':user.created,'likes':0})
-        return jsonify(response=[{"id":user_id ,"username":userdetail.username,"firstname":userdetail.first_name,
-        "lastname":userdetail.last_name,"email":userdetail.email,"location": userdetail.location,"biography":userdetail.biography,
-        "profile_photo":userdetail.profile_photo,"joined_on":userdetail.joined,"posts":u,"numpost":length,"numfollower":follow,"follower":f}])
+            p.append({'id': user.id, 'user_id': user.user_id, 'photo': user.photo, 'caption': user.caption, 'created_on': user.created_on, 'likes': 0})
+        return jsonify(response=[{"id": user_id, "username": userDetail.username, "firstname": userDetail.first_name, "lastname": userDetail.last_name, "email": userDetail.email, "location": userDetail.location, "biography": userDetail.biography, "profile_photo": userDetail.profile_photo, "joined_on": userDetail.joined_on, "posts":p, "numpost":length, "numfollower": follow, "follower": f}])
     else:
          return jsonify(error=[{"errors": "Unable to complete this action. Please try again soon."}])
         
     
 
 @app.route('/api/users/<user_id>/follow',methods=['POST'])
-#@login_required
 @requires_auth
 def follow(user_id): 
-    """create a follow relationship between the current user and the target user."""
+
     if request.method == 'POST':
-        target_user=int(request.form['user_id'])
-        current_user=int(request.form['follower_id'])
-        follows=UserFollows.query.filter_by(user_id=target_user).all()
-        check=''
+        followUser = int(request.form['user_id'])
+        current_user = int(request.form['follower_id'])
+        follows = UserFollows.query.filter_by(user_id = followUser).all()
+        check = ''
         for follow in follows:
-            if current_user==follow.follower_id:
-                check=1
+            if current_user == follow.follower_id:
+                check = 1
                 
         if check!=1:
-            follow = UserFollows(target_user,current_user)
+            follow = UserFollows(followUser,current_user)
             db.session.add(follow)
             db.session.commit()
-            user = UserProfile.query.filter_by(id=target_user).first()
-            msg= "You are now following "+ user.username
-            numfollow=len(UserFollows.query.filter_by(user_id=target_user).all())
-            return jsonify (response=[{"message":msg,"Follow":numfollow}]) 
+            user = UserProfile.query.filter_by(id=followUser).first()
+            msg = "You are now following "+ user.username
+            numfollow = len(UserFollows.query.filter_by(user_id = followUser).all())
+            return jsonify (response=[{"message": msg, "Follow": numfollow}]) 
         else:
-            numfollow=len(UserFollows.query.filter_by(user_id=target_user).all())
-            return jsonify (response=[{"message": "You are already following that user.","follow":numfollow}]) 
+            numfollow = len(UserFollows.query.filter_by(user_id = followUser).all())
+            return jsonify (response=[{"message": "You are already following that user.", "follow": numfollow}]) 
     else:
         return jsonify (errors=[{'error': "Unable to complete this action. Please try again soon."}])
     
 
+
 @app.route('/api/posts',methods=['GET']) 
-#@login_required
 @requires_auth
 def get_AllPost():
     """return all post for all users."""
     if request.method == 'GET':
-        u=[]
+        p = []
         Users= UserPosts.query.order_by(UserPosts.user_id).all()
         for user in Users:
-            userdetail =UserProfile.query.filter_by(id=user.user_id).first()
+            userDetail =UserProfile.query.filter_by(id=user.user_id).first()
             userlike = len(UserLikes.query.filter_by(post_id=user.id).all())
-            u.append({'id':user.id,'user_id':user.user_id,'postphoto':user.photo,'caption':user.caption,
-            'created_on':user.created,'likes':userlike,"username":userdetail.username,"userpro":userdetail.profile_photo})
-        return jsonify (response=[{'post': u}])
+            p.append({'id': user.id, 'user_id': user.user_id, 'postphoto': user.photo, 'caption': user.caption, 'created_on': user.created_on, 'likes': userlike, "username": userDetail.username, "userpro": userDetail.profile_photo})
+        return jsonify (response=[{'post': p}])
     return jsonify (errors=[{'error': "Unable to complete this action. Please try again soon."}])
 
+
+
 @app.route('/api/posts/<post_id>/like',methods=['POST'])
-#@login_required
 @requires_auth
 def like(post_id):
-    """ set a like on the current post by the logged in user"""
+
     if request.method == 'POST':
-        user_id=int(request.form['user_id'])
-        post=int(request.form['post_id'])
-        like = UserLikes(user_id,post)
+
+        user_id = int(request.form['user_id'])
+        post = int(request.form['post_id'])
+        like = UserLikes(user_id, post)
         db.session.add(like)
         db.session.commit()
-        total_likes = len(UserLikes.query.filter_by(post_id=post).all())
-        return jsonify (response=[{'message': "You liked a user post",'likes':total_likes}])
+        total_likes = len(UserLikes.query.filter_by(post_id = post).all())
+        return jsonify (response=[{'message': "You liked a user post ",'likes':total_likes}])
     return jsonify (error=[{'error': "Unable to complete this action. Please try again soon."}])
+
+
 
 @login_manager.user_loader
 def load_user(id):
     return UserProfile.query.get(int(id))
+
+
 
 # Flash errors from the form if validation fails
 def form_errors(form):
@@ -289,6 +279,7 @@ def send_text_file(file_name):
     return app.send_static_file(file_dot_text)
 
 
+
 @app.after_request
 def add_header(response):
     """
@@ -301,10 +292,12 @@ def add_header(response):
     return response
 
 
+
 @app.errorhandler(404)
 def page_not_found(error):
     """Custom 404 page."""
     return render_template('404.html'), 404
+
 
 
 if __name__ == '__main__':

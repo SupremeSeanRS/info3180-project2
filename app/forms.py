@@ -10,7 +10,7 @@ class registrationForm(FlaskForm):
     firstname = StringField('Firstname', validators=[DataRequired()])
     lastname = StringField('Lastname', validators=[DataRequired()])
     gender = SelectField('Gender', choices=[('Male','Male'), ('Female', 'Female'), ('Other', 'Other'), ('N/A', 'N/A')])
-    email = StringField('Email', validators=[DataRequired(),Email()])
+    email = StringField('Email', validators=[DataRequired()])
     location = StringField('Location', validators=[DataRequired()])
     bio = TextAreaField('Biography', validators=[DataRequired()])
     photo = FileField('Photo',validators=[FileRequired(),FileAllowed(['png', 'jpg', 'jpeg','Images only!'])])
@@ -18,7 +18,6 @@ class registrationForm(FlaskForm):
 class loginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
-    remember_me = BooleanField('Remember me')
 
 class postForm(FlaskForm):
     photo = FileField('Photo',validators=[FileRequired(),FileAllowed(['png', 'jpg', 'jpeg','Images only!'])])
