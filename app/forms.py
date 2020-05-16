@@ -4,15 +4,15 @@ from wtforms.validators import DataRequired, Email
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 
 class registrationForm(FlaskForm):
-    username=StringField('username', validators=[DataRequired()])
+    username = StringField('username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
-    confirmpassword = PasswordField('ConfirmPassword', validators=[DataRequired()])
-    firstname=StringField('Firstname', validators=[DataRequired()])
-    lastname=StringField('Lastname', validators=[DataRequired()])
-    gender=SelectField('Gender', choices=[('Male','Male'), ('Female', 'Female')])
-    email=StringField('Email', validators=[DataRequired(),Email()])
-    location=StringField('Location', validators=[DataRequired()])
-    bio=TextAreaField('Biography', validators=[DataRequired()])
+    conpassword = PasswordField('Confirm Password', validators=[DataRequired()])
+    firstname = StringField('Firstname', validators=[DataRequired()])
+    lastname = StringField('Lastname', validators=[DataRequired()])
+    gender = SelectField('Gender', choices=[('Male','Male'), ('Female', 'Female'), ('Other', 'Other'), ('N/A', 'N/A')])
+    email = StringField('Email', validators=[DataRequired(),Email()])
+    location = StringField('Location', validators=[DataRequired()])
+    bio = TextAreaField('Biography', validators=[DataRequired()])
     photo = FileField('Photo',validators=[FileRequired(),FileAllowed(['png', 'jpg', 'jpeg','Images only!'])])
 
 class loginForm(FlaskForm):
@@ -22,6 +22,6 @@ class loginForm(FlaskForm):
 
 class postForm(FlaskForm):
     photo = FileField('Photo',validators=[FileRequired(),FileAllowed(['png', 'jpg', 'jpeg','Images only!'])])
-    caption=TextAreaField('Caption', validators=[DataRequired()])  
+    caption = TextAreaField('Caption', validators=[DataRequired()])  
     
     
