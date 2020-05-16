@@ -92,9 +92,9 @@ def register():
                 db.session.add(user)
                 db.session.commit()
                 flash('Registration was successfull', 'success')
-                return jsonify(response=[{"message":"User successfully registered"}])
+                return jsonify(response=[{"message":"User was successfully registered"}])
             else:
-                flash("Password and Confirmpassword don't match", 'danger')
+                flash("Passwords does not match", 'danger')
                 return jsonify(response=[{"message":"Passwords does not match"}])
                 
         elif user is not None:
@@ -133,7 +133,7 @@ def login():
             payload = {'user_id': user.id}
             token = jwt.encode(payload,token_key)
             session['userid']=user.id
-            return jsonify(response=[{"token":token.decode("utf-8"),"message":"login was successfully","user":user.id}])
+            return jsonify(response=[{"token":token.decode("utf-8"),"message":"Login was successful","user":user.id}])
             
         else:
             flash('Username or Password is incorrect.', 'danger')
