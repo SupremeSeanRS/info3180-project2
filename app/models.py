@@ -50,7 +50,7 @@ class UserProfile(db.Model):
 
 class UserPosts(db.Model):
     
-    __tablename__ ='posts'
+    __tablename__ = 'posts'
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer)
