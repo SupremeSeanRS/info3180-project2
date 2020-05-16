@@ -70,7 +70,7 @@ def register():
     if request.method == 'POST' and form.validate_on_submit():
         username= form.username.data
         password = form.password.data
-        confirmpassword = form.confirmpassword.data
+        conpassword = form.confirmpassword.data
         fname = form.firstname.data
         lname = form.lastname.data
         gender = form.gender.data
@@ -87,19 +87,19 @@ def register():
         user = UserProfile.query.filter_by(username=username).first()
         if user is None :
             #todo add user to database
-            if password == confirmpassword:
+            if password == conpassword:
                 user=UserProfile(username, password, fname, lname, gender, location, email, bio, photo, date)
                 db.session.add(user)
                 db.session.commit()
-                flash('Registration was successfull', 'success')
-                return jsonify(response=[{"message":"User was successfully registered"}])
+                flash('Registration was successful', 'success')
+                return jsonify(response=[{"message": "User was successfully registered"}])
             else:
                 flash("Passwords does not match", 'danger')
-                return jsonify(response=[{"message":"Passwords does not match"}])
+                return jsonify(response=[{"message": "Passwords does not match"}])
                 
         elif user is not None:
-            flash("already a member", 'danger')
-            return jsonify(errors=[{"error":"You are already a member"}])
+            flash("The username is taken.", 'danger')
+            return jsonify(errors=[{"error": "The username is already taken."}])
     return jsonify(errors=[{"errors":form_errors(form)}])
     
     
@@ -133,11 +133,11 @@ def login():
             payload = {'user_id': user.id}
             token = jwt.encode(payload,token_key)
             session['userid']=user.id
-            return jsonify(response=[{"token":token.decode("utf-8"),"message":"Login was successful","user":user.id}])
+            return jsonify(response=[{"token":token.decode("utf-8"),"message": "Login was successful","user":user.id}])
             
         else:
-            flash('Username or Password is incorrect.', 'danger')
-            return jsonify(errors=[{"errors":"Username or Password is incorrect."}])
+            flash('Username or Password is incorrect. Please try again', 'danger')
+            return jsonify(errors=[{"errors":"Username or Password is incorrect. Please try again"}])
 
     return jsonify(errors=[{"errors":form_errors(form)}])
     
@@ -150,9 +150,9 @@ def logout():
     g.currrent_user=None
     if session['userid']:
         session.pop('userid')  
-        logout={"message":"User successfully logged out"}
+        logout={"message": "User has been successfully logged out."}
         return jsonify(response=[logout])
-    return jsonify(errors=[{"errors":"not logout"}])
+    return jsonify(errors=[{"errors": "User was not logged out."}])
 
 
 @app.route('/api/users/<user_id>/posts',methods=["POST","GET"]) 
@@ -161,7 +161,7 @@ def logout():
 def post(user_id):
     """used for adding posts to the users feed"""
     form = postForm()
-    id=int(user_id)
+    id = int(user_id)
     now = datetime.datetime.now()
     
     if request.method == 'POST':
@@ -175,7 +175,7 @@ def post(user_id):
             user=UserPosts(user_id,photo,caption,date)
             db.session.add(user)
             db.session.commit()
-            return jsonify(response=[{"message":"Successfully created a new post"}])
+            return jsonify(response=[{"message": "Post was successfully created."}])
         else:
             return jsonify(errors=[{"errors":form_errors(form)}])
     if request.method == 'GET':
@@ -184,7 +184,7 @@ def post(user_id):
         userdetail =UserProfile.query.filter_by(id=id).first()
         Users =UserPosts.query.filter_by(user_id=id).all()
         length=len(Users)
-        followers=UserFollows.query.filter_by(user_id=id).all()
+        followers = UserFollows.query.filter_by(user_id=id).all()
         follow=len(followers)
         for follower in followers:
             f.append(follower.user_id)
@@ -195,7 +195,7 @@ def post(user_id):
         "lastname":userdetail.last_name,"email":userdetail.email,"location": userdetail.location,"biography":userdetail.biography,
         "profile_photo":userdetail.profile_photo,"joined_on":userdetail.joined,"posts":u,"numpost":length,"numfollower":follow,"follower":f}])
     else:
-         return jsonify(error=[{"errors":"unable to create link"}])
+         return jsonify(error=[{"errors": "Unable to complete this action. Please try again soon."}])
         
     
 
@@ -218,14 +218,14 @@ def follow(user_id):
             db.session.add(follow)
             db.session.commit()
             user = UserProfile.query.filter_by(id=target_user).first()
-            msg="You are now following that user."+ user.username
+            msg= "You are now following "+ user.username
             numfollow=len(UserFollows.query.filter_by(user_id=target_user).all())
-            return jsonify (response=[{"message":msg,"follow":numfollow}]) 
+            return jsonify (response=[{"message":msg,"Follow":numfollow}]) 
         else:
             numfollow=len(UserFollows.query.filter_by(user_id=target_user).all())
-            return jsonify (response=[{"message":"You are already following that user.","follow":numfollow}]) 
+            return jsonify (response=[{"message": "You are already following that user.","follow":numfollow}]) 
     else:
-        return jsonify (errors=[{'error': 'unable to create link'}])
+        return jsonify (errors=[{'error': "Unable to complete this action. Please try again soon."}])
     
 
 @app.route('/api/posts',methods=['GET']) 
@@ -242,7 +242,7 @@ def get_AllPost():
             u.append({'id':user.id,'user_id':user.user_id,'postphoto':user.photo,'caption':user.caption,
             'created_on':user.created,'likes':userlike,"username":userdetail.username,"userpro":userdetail.profile_photo})
         return jsonify (response=[{'post': u}])
-    return jsonify (errors=[{'error': 'unable to create link'}])
+    return jsonify (errors=[{'error': "Unable to complete this action. Please try again soon."}])
 
 @app.route('/api/posts/<post_id>/like',methods=['POST'])
 #@login_required
@@ -256,8 +256,8 @@ def like(post_id):
         db.session.add(like)
         db.session.commit()
         total_likes = len(UserLikes.query.filter_by(post_id=post).all())
-        return jsonify (response=[{'message': 'You liked a user post','likes':total_likes}])
-    return jsonify (error=[{'error': 'unable to create link'}])
+        return jsonify (response=[{'message': "You liked a user post",'likes':total_likes}])
+    return jsonify (error=[{'error': "Unable to complete this action. Please try again soon."}])
 
 @login_manager.user_loader
 def load_user(id):
