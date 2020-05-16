@@ -291,7 +291,7 @@ const Login=Vue.component('login',{
             </div>
             </ul>
          </div>
-     <br>
+     <br><br>
      <h5 v-if="text=='User has been successfully registered.'" class="alert alert-success">{{text}}</h5>
      <h1 class="loginWelcome">Login</h1>
      
@@ -418,10 +418,7 @@ const Explore=Vue.component('explore',{
                         <div>
                             <div class="user_explore">
                                 <span @click="post(user.user_id)">
-                                    <h6 class="user-profile-explore">
-                                        <img v-bind:src="user.userpro" alt="User Profile picture" id="user-img-explore"/> 
-                                        {{user.username}}
-                                    </h6>
+                                    <h6 class="user-profile-explore"><img v-bind:src="user.userpro" alt="User Profile picture" id="user-img-explore"/> {{user.username}}</h6>
                                 </span>
                                 <img v-bind:src="user.postphoto" alt="User Posted Image" id="user-post"/>
                                 <br><br>
@@ -635,13 +632,13 @@ const Users=Vue.component('users',{
     methods:{
         Follow:function(){
             let self = this;
-            let userid = ""+self.other;
+            let userid = ""+self.Other;
             let form_data = new FormData();
             let slc = self.uc;
-            form_data.append("user_id",userid);
+            form_data.append("user_id", JSON.parse(userid));
             form_data.append("follower_id", slc);
                     
-            fetch("/api/users/"+userid+"/follow", { 
+            fetch("/api/users/"+userid+"/follow", {
             method: 'POST',
             body: form_data,
             headers: {
@@ -658,7 +655,6 @@ const Users=Vue.component('users',{
                 let log= document.getElementById('fo').innerText="Following";
             })
             .catch(function (error) {
-                
             });
         }
     }
@@ -713,7 +709,7 @@ const Post=Vue.component('post',{
             let postForm= document.getElementById('post');
             let form_data = new FormData(postForm);
     
-            let userid = ""+ self.uc;
+            let userid = ""+self.uc;
             fetch('/api/users/'+userid+'/posts',{
                 method:'POST',
                 body: form_data,

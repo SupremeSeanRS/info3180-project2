@@ -21,7 +21,6 @@ from functools import wraps
 ###
 
 
-
 def requires_auth(f): 
     @wraps(f) 
     def decorated(*args, **kwargs):
@@ -149,9 +148,8 @@ def logout():
 @requires_auth
 def post(user_id):
 
-    form = postForm()
-    id = int(user_id)
-    ctime = datetime.datetime.now()
+    form=postForm()
+    id=int(user_id)
     
     if request.method == 'POST':
         if form.validate_on_submit():
@@ -160,28 +158,33 @@ def post(user_id):
             filename = secure_filename(photo.filename)
             photo.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             photo='/static/uploads/'+ filename
-            date = ctime.strftime("%d %B %Y")                                                                                                                                                                     
-            userpost = UserPosts(user_id, photo, caption, date)
-            db.session.add(userpost)
+            now = datetime.datetime.now()
+            date=now.strftime("%d %B %Y")                                                                                                                                                                     
+            user=UserPosts(user_id,photo,caption,date)
+            db.session.add(user)
             db.session.commit()
-            return jsonify(response=[{"message": "Successfully created a new post"}])
+            return jsonify(response=[{"message":"Successfully created a new post"}])
         else:
             return jsonify(errors=[{"errors":form_errors(form)}])
     if request.method == 'GET':
         p=[]
         f=[0,0]
-        userDetail = UserProfile.query.filter_by(id = id).first()
-        Users = UserPosts.query.filter_by(user_id = id).all()
-        length = len(Users)
-        followers = UserFollows.query.filter_by(user_id = id).all()
-        follow = len(followers)
+        
+        userdetail =UserProfile.query.filter_by(id=id).first()
+        Users = UserPosts.query.filter_by(user_id=id).all()
+        length=len(Users)
+        followers=UserFollows.query.filter_by(user_id=id).all()
+        follow=len(followers)
         for follower in followers:
-            p.append(follower.user_id)
+            f.append(follower.user_id)
         for user in Users:
-            p.append({'id': user.id, 'user_id': user.user_id, 'photo': user.photo, 'caption': user.caption, 'created_on': user.created_on, 'likes': 0})
-        return jsonify(response=[{"id": user_id, "username": userDetail.username, "firstname": userDetail.first_name, "lastname": userDetail.last_name, "email": userDetail.email, "location": userDetail.location, "biography": userDetail.biography, "profile_photo": userDetail.profile_photo, "joined_on": userDetail.joined_on, "posts":p, "numpost":length, "numfollower": follow, "follower": f}])
+            p.append({'id':user.id,'user_id':user.user_id,'photo':user.photo,'caption':user.caption,
+            'created_on':user.created_on,'likes':0})
+        return jsonify(response=[{"id":user_id, "username":userdetail.username,"firstname":userdetail.first_name,
+        "lastname":userdetail.last_name,"email":userdetail.email,"location": userdetail.location,"biography":userdetail.biography,
+        "profile_photo":userdetail.profile_photo,"joined_on":userdetail.joined_on,"posts":p,"numpost":length,"numfollower":follow,"follower":f}])
     else:
-         return jsonify(error=[{"errors": "Unable to complete this action. Please try again soon."}])
+         return jsonify(error=[{"errors":"unable to create link"}])
         
     
 
@@ -192,7 +195,7 @@ def follow(user_id):
     if request.method == 'POST':
         followUser = int(request.form['user_id'])
         current_user = int(request.form['follower_id'])
-        follows = UserFollows.query.filter_by(user_id = followUser).all()
+        follows = UserFollows.query.filter_by(user_id=followUser).all()
         check = ''
         for follow in follows:
             if current_user == follow.follower_id:
@@ -204,10 +207,10 @@ def follow(user_id):
             db.session.commit()
             user = UserProfile.query.filter_by(id=followUser).first()
             msg = "You are now following "+ user.username
-            numfollow = len(UserFollows.query.filter_by(user_id = followUser).all())
+            numfollow = len(UserFollows.query.filter_by(user_id=followUser).all())
             return jsonify (response=[{"message": msg, "Follow": numfollow}]) 
         else:
-            numfollow = len(UserFollows.query.filter_by(user_id = followUser).all())
+            numfollow = len(UserFollows.query.filter_by(user_id=followUser).all())
             return jsonify (response=[{"message": "You are already following that user.", "follow": numfollow}]) 
     else:
         return jsonify (errors=[{'error': "Unable to complete this action. Please try again soon."}])
