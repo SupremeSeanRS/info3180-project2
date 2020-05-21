@@ -92,7 +92,7 @@ footer {
 }
 
 .hide_info {
-    visibility: hidden;
+    display: none;
 }
 
 .postBtn {
@@ -129,7 +129,7 @@ footer {
     background-color: white;
     position: absolute;
     height: 250px;
-    top: 5%;
+    top: 8%;
     left:5%;
 }
 
@@ -239,4 +239,8 @@ footer {
 
 .creation_time {
     padding-left: 560px;
+}
+
+.appended {
+    display: inline-block;
 }

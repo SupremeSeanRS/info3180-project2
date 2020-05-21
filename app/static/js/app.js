@@ -279,17 +279,21 @@ const Register=Vue.component('register',{
 });
 
 
-const Login=Vue.component('login',{
+const Login = Vue.component('login',{
      template:`
      <div class="loginPage">
          <div>
-            <ul  v-for="(mgs,con, index) in messge">
+            <br><br>
+            <ul v-for="(mgs,con, index) in messge">
             <div v-if="con === 'errors'" >
-                <li v-for="mgs in messge.errors" class="error">
-                    {{mgs}}
-                </li>
+                <div class="alert alert-danger">
+                    <h5 v-for="mgs in messge.errors" class="appended">
+                        {{mgs}}
+                    </h5>
+                </div>
             </div>
             </ul>
+            <div v-for="error in errors" class="alert alert-danger"> {{error.errors}} </div>
          </div>
      <br><br>
      <h5 v-if="text=='User has been successfully registered.'" class="alert alert-success">{{text}}</h5>
@@ -558,7 +562,7 @@ const Users=Vue.component('users',{
                         <div class="userBtns">
                             <br> 
                             <span v-if="uc==user.id"><button class="btn btn-primary fol hide_info">Follow</button></span>
-                            <span v-else-if=" uc in user.follower"><button class="btn btn-success foll>Following</button></span>
+                            <span v-else-if="uc in user.follower"><button class="btn btn-success foll">Following</button></span>
                             <span v-else><button class="btn btn-primary fol" @click="Follow" id="fo">Follow</button></span>
                         </div>
                     </div>
@@ -605,11 +609,12 @@ const Users=Vue.component('users',{
                                   self.user= jsonResponse.response["0"]; 
                               })
                               .catch(function(error){
+                                  console.log(other);
                               });
                         }
                 else{
                      let self =this;
-                     let userid = ""+self.other;
+                     let userid = self.Other;
                         fetch('/api/users/'+userid+'/posts',{
                                 method:'GET',
                                  'headers': {
@@ -625,7 +630,7 @@ const Users=Vue.component('users',{
                                   self.user= jsonResponse.response["0"]; 
                               })
                               .catch(function(error){
-
+                                  console.log(error);
                               });
                     }
     },
@@ -652,7 +657,7 @@ const Users=Vue.component('users',{
             })
             .then(function (jsonResponse) {
                 let loginForm= document.getElementById('follow').innerHTML=jsonResponse.response['0'].follow;
-                let log= document.getElementById('fo').innerText="Following";
+                let log= document.getElementById('fo').innerText="Follow";
             })
             .catch(function (error) {
             });
@@ -745,7 +750,7 @@ const router = new VueRouter({
          { path: '/explore', component: Explore},
          { path: '/login' , component: Login}, 
          { path: '/logout', component: Logout},
-         { path: '/users/:user_id', component: Users},
+         { path: '/users/:user_id', component: Users, name:"users", meta: { requiresAuth: true }},
          { path: '/post/new', component: Post}
          ]
     });

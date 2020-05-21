@@ -125,7 +125,7 @@ def login():
             
         else:
             flash('Username or Password is incorrect. Please try again', 'danger')
-            return jsonify(errors=[{"errors":"Username or Password is incorrect. Please try again"}])
+            return jsonify(errors=[{"errors": ("Username__or__Password__is__incorrect.")}])
 
     return jsonify(errors=[{"errors":form_errors(form)}])
     
@@ -144,12 +144,11 @@ def logout():
 
 
 
-@app.route('/api/users/<user_id>/posts',methods=["POST","GET"]) 
+@app.route('/api/users/<int:user_id>/posts',methods=["POST","GET"]) 
 @requires_auth
 def post(user_id):
 
     form=postForm()
-    id=int(user_id)
     
     if request.method == 'POST':
         if form.validate_on_submit():
@@ -166,14 +165,16 @@ def post(user_id):
             return jsonify(response=[{"message":"Successfully created a new post"}])
         else:
             return jsonify(errors=[{"errors":form_errors(form)}])
+            
     if request.method == 'GET':
+        
         p=[]
         f=[0,0]
         
-        userdetail =UserProfile.query.filter_by(id=id).first()
-        Users = UserPosts.query.filter_by(user_id=id).all()
+        userdetail =UserProfile.query.filter_by(id=int(user_id)).first()
+        Users = UserPosts.query.filter_by(user_id=int(user_id)).all()
         length=len(Users)
-        followers=UserFollows.query.filter_by(user_id=id).all()
+        followers = UserFollows.query.filter_by(user_id= userdetail.id).all()
         follow=len(followers)
         for follower in followers:
             f.append(follower.user_id)
